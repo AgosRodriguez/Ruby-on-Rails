@@ -20,13 +20,17 @@ def print_line
 end
 
 # Pre-condicion: Las oraciones ingresada no deben comenzar con un espacio
-def acronym(palabra)
+def acronym(p)
+  palabra = p.gsub('para',"") 
+             .gsub('y', "")     
+             .tr('de', "") 
+  
   acronimo = palabra.chars
   aux = []
   aux.push(acronimo[0])
   i = 1
   while i < acronimo.length
-    if acronimo[i] == ' ' || acronimo[i] == '-'
+    if (acronimo[i] == ' ' && acronimo[i+1] != ' ') || acronimo[i] == '-'
       aux.push(acronimo[i+1])
     end
    i = i+1
@@ -34,27 +38,16 @@ def acronym(palabra)
   return aux.join('')
 end
 
-#Convierte la palabra a minuscula
 def convertidor(palabra)
-  minuscula = palabra.downcase
-  return minuscula
-end
-
-#Convierte una cadena en un array de caracteres y luego los ordena ascendentemente
-def ordenAscendente(palabra)
-  array = palabra.chars
-  array.sort
-  return array
+  return palabra.downcase.chars.sort.join('')
 end
 
 def anagram(palabra)
   anagrama = convertidor(palabra)
-  array = ordenAscendente(anagrama)
 
   ANAGRAM_LIST.each do |i|
-    j = ordenAscendente(i)
-    if (array.length == j.length)
-      if (j - array).empty? #comprobar que todos los valores de un array están en incluidos en otro.
+    if (anagrama.length == i.length)
+      if convertidor(i) == anagrama
         return true
       end
     end  
